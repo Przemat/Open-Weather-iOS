@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @State var weather:OpenWeather?
+    @State var owds:OpenWeatherDataService
+    @State var city: City
+    var weather:OpenWeather?
+    var forecast:Forecast?
     var body: some View {
         
         VStack(alignment: .center){
@@ -82,6 +85,11 @@ struct WeatherView: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing)
         }
+        .onAppear() {
+            Task{
+                await loadWeathers()
+            }
+        }
     }
     
     fileprivate func detail(imgName:String, text:String, value:String) -> some View {
@@ -103,7 +111,14 @@ struct WeatherView: View {
         }
         .padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
     }
-    
+    func loadWeathers() async {
+            do {
+                weather = try await owds.loadWeather(cityNames: city.name)
+                forecast = try await owds.loadForecast(cityNames: city.name)
+            } catch {
+                print("\(error)")
+            }
+        }
 
 }
 
@@ -120,3 +135,4 @@ struct WeatherView_Previews: PreviewProvider {
         weatherViewWrapper()
     }
 }
+

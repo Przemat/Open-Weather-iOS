@@ -67,18 +67,25 @@ struct Weather: Identifiable, Codable {
     var icon:String?
 }
 
-struct Main:Codable {
-    var temp:Double?
-    var feels_like:Double?
-    var temp_min:Double?
-    var temp_max:Double?
-    var pressure:Int?
-    var humidity:Int?
+struct Main: Codable {
+    let temp, feelsLike, tempMin, tempMax: Double
+    let pressure, humidity, seaLevel, grndLevel: Int
+
+    enum CodingKeys: String, CodingKey {
+        case temp
+        case feelsLike = "feels_like"
+        case tempMin = "temp_min"
+        case tempMax = "temp_max"
+        case pressure, humidity
+        case seaLevel = "sea_level"
+        case grndLevel = "grnd_level"
+    }
 }
 
 struct Wind:Codable{
     var speed:Double?
     var deg:Int?
+    let gust: Double?
 }
 
 struct Clouds:Codable{

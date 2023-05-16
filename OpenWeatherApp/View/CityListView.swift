@@ -11,11 +11,12 @@ struct CityListView: View {
     @State private var showAlert:Bool = false
     @State private var deleteIndexSet: IndexSet?
     @StateObject var cds:CityDataService
+    @StateObject var owds:OpenWeatherDataService
 
     var body: some View {
         List{
             ForEach(cds.cities){ city in
-                NavigationLink(destination: CityInfoView(city:city)) {
+                NavigationLink(destination: WeatherView(owds: owds, cityName: city)) {
                     CityCellView(city: city)
                 }
              }
